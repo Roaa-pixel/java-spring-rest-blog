@@ -17,14 +17,17 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
+    @Version private Long version;
+    @NotNull @Size(min = 4, max = 100) private String title;
     @Column(length=1000000)
     @Lob
     private String body;
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
     private Date date;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Author author;
+    
     public Post() {
         super();
     }
@@ -35,6 +38,11 @@ public class Post {
         this.body = body;
     }
 
+    public Author getAuthor()
+    {
+        return author;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -45,6 +53,10 @@ public class Post {
 
     public String getTitle() {
         return title;
+    }
+    public void setAuthor(Author author)
+    {
+        this.author=author;
     }
 
     public void setTitle(String title) {
